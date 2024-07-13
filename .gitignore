@@ -1,3 +1,10 @@
+# frontmatter
+.frontmatter/
+frontmatter.json
+
+# vscode
+.vscode/
+
 # build output
 dist/
 # generated types
