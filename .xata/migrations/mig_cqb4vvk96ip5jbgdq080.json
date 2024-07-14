@@ -1,0 +1,30 @@
+{
+  "done": true,
+  "migration": {
+    "name": "mig_cqb4vvk96ip5jbgdq080",
+    "operations": [
+      {
+        "add_column": {
+          "table": "Comments",
+          "column": {
+            "pk": false,
+            "name": "message",
+            "type": "text",
+            "check": {
+              "name": "Comments_xata_text_length_message",
+              "constraint": "OCTET_LENGTH(\"message\") <= 204800"
+            },
+            "unique": false,
+            "comment": "{\"xata.type\":\"text\"}",
+            "nullable": true
+          }
+        }
+      }
+    ]
+  },
+  "migrationType": "pgroll",
+  "name": "mig_cqb4vvk96ip5jbgdq080",
+  "parent": "mig_cqb4vcc96ip5jbgdq060",
+  "schema": "public",
+  "startedAt": "2024-07-16T10:48:31.384522Z"
+}
