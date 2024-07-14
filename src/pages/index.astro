@@ -1,7 +1,11 @@
 ---
+import { getEntry } from 'astro:content';
 import Layout from "../layouts/Base.astro";
+
+const { render } = await getEntry('blog', '2024-07-14-homecopy');
+const { Content } = await render();
 ---
 
 <Layout>
-    <h1>Olin Fernandes</h1>
+    <Content />
 </Layout>

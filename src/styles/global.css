@@ -54,7 +54,7 @@ h3,
 h4,
 h5,
 h6 {
-	margin: 0 0 0.5rem 0;
+	margin: 0 0 2rem 0;
 	color: rgb(var(--black));
 	line-height: 1.2;
 }
@@ -87,7 +87,19 @@ p {
 	margin-bottom: 1em;
 }
 .prose p {
-	margin-bottom: 2em;
+	margin-bottom: 1em;
+}
+.prose ul {
+  margin-bottom: 2em;
+}
+.prose table {
+  margin-bottom: 2em;
+}
+.prose pre {
+  margin-bottom: 2em;
+}
+.prose hr {
+  margin-bottom: 1em;
 }
 textarea {
 	width: 100%;

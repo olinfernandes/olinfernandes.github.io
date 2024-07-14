@@ -8,11 +8,14 @@ export const collections = {
       z.object({
         title: z.string(),
         description: z.string(),
+        draft: z.boolean().default(false).optional(),
         // Transform string to Date object
         pubDate: z.coerce.date(),
         updatedDate: z.coerce.date().optional(),
         heroImage: image(),
         preview: image().optional(),
+        tags: z.array(z.string()).default([]).optional(),
+        categories: z.array(z.string()).default([]).optional(),
       }),
   }),
 };
