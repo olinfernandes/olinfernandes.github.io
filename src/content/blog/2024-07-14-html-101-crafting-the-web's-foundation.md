@@ -10,7 +10,7 @@ tags:
   - html
 categories:
   - web
-type: content
+type: blog
 ---
 
 HTML stands for Hypertext Markup Language and is the backbone of web development [^1]. It is used to construct the structure and content of web pages. In this post, we'll go over the basics of HTML to help you get started with web programming.

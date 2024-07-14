@@ -1,11 +1,15 @@
 ---
+import { getEntry } from "astro:content";
 import Layout from "../layouts/BlogPost.astro";
 import heroImage from "../content/blog/images/blog-placeholder-about.jpg";
+
+const {
+  data: { title, pubDate, draft },
+  render,
+} = await getEntry("copy", "2024-07-15-aboutcopy");
+const { Content } = await render();
 ---
 
-<Layout
-  title="About Me"
-  description="Lorem ipsum dolor sit amet"
-  pubDate={new Date("August 08 2021")}
-  heroImage={heroImage}
-/>
+<Layout title={title} description="" pubDate={pubDate} heroImage={heroImage}>
+  {!draft && <Content />}
+</Layout>

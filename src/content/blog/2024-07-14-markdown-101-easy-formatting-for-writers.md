@@ -2,7 +2,7 @@
 title: Markdown 101 Easy Formatting for Writers
 description: Markdown is a lightweight markup language that allows writers to create formatted text using plain syntax.
 pubDate: 2024-07-14T16:41:41.926Z
-updateDate: 2024-07-14T16:41:41.927Z
+updateDate: 2024-07-14T16:41:41.926Z
 preview: ./images/blog-placeholder-4.jpg
 heroImage: ./images/blog-placeholder-4.jpg
 draft: false
@@ -10,7 +10,7 @@ tags:
 - markdown
 categories:
 - web
-type: content
+type: blog
 ---
 
 Markdown is a lightweight markup language that allows writers to create formatted text using plain syntax. It's easy to learn and use, making it a popular choice for writing documents, blog posts, and even books.

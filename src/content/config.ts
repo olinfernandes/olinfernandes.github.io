@@ -12,8 +12,8 @@ export const collections = {
         updateDate: z.coerce.date().optional(),
         heroImage: image(),
         preview: image().optional(),
-        tags: z.array(z.string()).default([]).optional(),
-        categories: z.array(z.string()).default([]).optional(),
+        tags: z.array(z.string()).optional(),
+        categories: z.array(z.string()).optional(),
       }),
   }),
   copy: defineCollection({
@@ -22,6 +22,7 @@ export const collections = {
       title: z.string(),
       pubDate: z.coerce.date(),
       updateDate: z.coerce.date(),
+      draft: z.boolean().default(false).optional(),
     })
   })
 };
