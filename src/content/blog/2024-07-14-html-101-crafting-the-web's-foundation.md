@@ -2,7 +2,7 @@
 title: HTML 101 Crafting the Web's Foundation
 description: HTML stands for Hypertext Markup Language and is the backbone of web development
 pubDate: 2024-07-14T09:11:23.379Z
-updatedDate: 2024-07-14T09:11:23.379Z
+updateDate: 2024-07-14T09:11:23.379Z
 preview: ./images/blog-placeholder-3.jpg
 heroImage: ./images/blog-placeholder-3.jpg
 draft: false
