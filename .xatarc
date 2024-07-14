@@ -1,0 +1,6 @@
+{
+  "databaseURL": "https://Olin-Fernandes-s-workspace-enni6o.us-east-1.xata.sh/db/blogs",
+  "codegen": {
+    "output": "src/xata.ts"
+  }
+}

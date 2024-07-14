@@ -1,0 +1,25 @@
+{
+  "done": true,
+  "migration": {
+    "name": "mig_cqb513c96ip5jbgdq0b0",
+    "operations": [
+      {
+        "add_column": {
+          "table": "Likes",
+          "column": {
+            "pk": false,
+            "name": "likes",
+            "type": "bigint",
+            "unique": false,
+            "nullable": true
+          }
+        }
+      }
+    ]
+  },
+  "migrationType": "pgroll",
+  "name": "mig_cqb513c96ip5jbgdq0b0",
+  "parent": "mig_cqb50qs96ip5jbgdq0a0",
+  "schema": "public",
+  "startedAt": "2024-07-16T10:50:53.919824Z"
+}

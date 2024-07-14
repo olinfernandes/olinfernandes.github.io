@@ -1,0 +1,31 @@
+{
+  "done": true,
+  "migration": {
+    "name": "mig_cqb50fs96ip5jbgdq090",
+    "operations": [
+      {
+        "add_column": {
+          "up": "''",
+          "table": "Comments",
+          "column": {
+            "pk": false,
+            "name": "blog_id",
+            "type": "text",
+            "check": {
+              "name": "Comments_xata_string_length_blog_id",
+              "constraint": "LENGTH(\"blog_id\") <= 2048"
+            },
+            "unique": false,
+            "comment": "{\"xata.type\":\"string\"}",
+            "nullable": false
+          }
+        }
+      }
+    ]
+  },
+  "migrationType": "pgroll",
+  "name": "mig_cqb50fs96ip5jbgdq090",
+  "parent": "mig_cqb4vvk96ip5jbgdq080",
+  "schema": "public",
+  "startedAt": "2024-07-16T10:49:35.636209Z"
+}
