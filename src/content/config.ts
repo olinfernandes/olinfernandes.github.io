@@ -11,11 +11,19 @@ export const collections = {
         draft: z.boolean().default(false).optional(),
         // Transform string to Date object
         pubDate: z.coerce.date(),
-        updatedDate: z.coerce.date().optional(),
+        updateDate: z.coerce.date().optional(),
         heroImage: image(),
         preview: image().optional(),
         tags: z.array(z.string()).default([]).optional(),
         categories: z.array(z.string()).default([]).optional(),
       }),
   }),
+  copy: defineCollection({
+    type: 'content',
+    schema: z.object({
+      title: z.string(),
+      pubDate: z.coerce.date(),
+      updateDate: z.coerce.date(),
+    })
+  })
 };
