@@ -115,4 +115,6 @@ function greet(name) {
 
 Markdown is a simple and efficient way to format text without knowing HTML. It's a great tool for writers, bloggers, and anyone who wants to create formatted text without the hassle of HTML. Stay tuned for our next post to explore more advanced Markdown syntax!
 
-_Read Time:_ 10 minutes
+***
+
+## _References_

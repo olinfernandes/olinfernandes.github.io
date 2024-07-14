@@ -80,8 +80,6 @@ Congrats!! You now know basic HTML! 👏🏽
 
 By going through the fundamentals of HTML, this tutorial offers a strong base upon which to grow. You now understand the fundamentals of using necessary tags and organizing an HTML page. Ahead of time, check out our upcoming post where we'll discuss decorating your web pages with CSS.
 
-_Read Time:_ 12 minutes
-
 ---
 
 #### _References_

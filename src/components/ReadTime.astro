@@ -1,0 +1,10 @@
+---
+import { type CollectionEntry } from "astro:content";
+import { calcReadTime } from "../utils";
+
+type Props = CollectionEntry<"blog">;
+
+const { body } = Astro.props;
+---
+
+<p><em>Read Time: {calcReadTime(body)} minutes</em></p>

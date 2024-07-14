@@ -6,7 +6,7 @@ import FormattedDate from "../../components/FormattedDate.astro";
 import { CARD_IMAGE } from "../../consts";
 
 const posts = (await getCollection("blog", (item) => !item.data.draft)).sort(
-  (a, b) => a.data.pubDate.valueOf() - b.data.pubDate.valueOf(),
+  (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf(),
 );
 ---
 
