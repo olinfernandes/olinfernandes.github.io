@@ -2,6 +2,9 @@
 .frontmatter/
 frontmatter.json
 
+# zed
+.zed/
+
 # vscode
 .vscode/
 
