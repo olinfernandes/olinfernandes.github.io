@@ -17,6 +17,10 @@ permissions:
 jobs:
   build:
     runs-on: ubuntu-latest
+    env:
+      XATA_DB_URL: ${{env.XATA_DB_URL}}
+      XATA_API_KEY: ${{env.XATA_API_KEY}}
+      XATA_BRANCH: ${{env.XATA_BRANCH}}
     steps:
       - name: Checkout your repository using git
         uses: actions/checkout@v4
