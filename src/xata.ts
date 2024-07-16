@@ -101,6 +101,53 @@ const tables = [
       },
     ],
   },
+  {
+    name: "Subscribers",
+    columns: [
+      {
+        name: "email",
+        type: "text",
+        notNull: true,
+        unique: true,
+        defaultValue: null,
+      },
+      {
+        name: "name",
+        type: "text",
+        notNull: false,
+        unique: false,
+        defaultValue: null,
+      },
+      {
+        name: "xata_createdat",
+        type: "datetime",
+        notNull: true,
+        unique: false,
+        defaultValue: "now()",
+      },
+      {
+        name: "xata_id",
+        type: "text",
+        notNull: true,
+        unique: true,
+        defaultValue: "('rec_'::text || (xata_private.xid())::text)",
+      },
+      {
+        name: "xata_updatedat",
+        type: "datetime",
+        notNull: true,
+        unique: false,
+        defaultValue: "now()",
+      },
+      {
+        name: "xata_version",
+        type: "int",
+        notNull: true,
+        unique: false,
+        defaultValue: "0",
+      },
+    ],
+  },
 ] as const;
 
 export type SchemaTables = typeof tables;
@@ -112,9 +159,13 @@ export type CommentsRecord = Comments & XataRecord;
 export type Likes = InferredTypes["Likes"];
 export type LikesRecord = Likes & XataRecord;
 
+export type Subscribers = InferredTypes["Subscribers"];
+export type SubscribersRecord = Subscribers & XataRecord;
+
 export type DatabaseSchema = {
   Comments: CommentsRecord;
   Likes: LikesRecord;
+  Subscribers: SubscribersRecord;
 };
 
 const DatabaseClient = buildClient();
