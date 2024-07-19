@@ -2,7 +2,9 @@
 import { type CollectionEntry } from "astro:content";
 import { calcReadTime } from "../utils";
 
-type Props = CollectionEntry<"blog">;
+type Props = {
+  body: CollectionEntry<"blog">["body"];
+};
 
 const { body } = Astro.props;
 ---
