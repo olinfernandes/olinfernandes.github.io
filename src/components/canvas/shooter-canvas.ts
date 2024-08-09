@@ -346,8 +346,11 @@ class ShooterCanvas extends ShooterCanvasTemplate {
     const {
       canvas: { current_track, game_music },
     } = this;
+
     super.effect(() => {
       this.gameDifficulty();
+    });
+    super.effect(() => {
       this.gameMusic();
     });
 
@@ -458,7 +461,15 @@ class ShooterCanvas extends ShooterCanvasTemplate {
 
   drawGameOver() {
     const {
-      canvas: { ctx, col_ctx, width, height, player_score, music_playing, game_music },
+      canvas: {
+        ctx,
+        col_ctx,
+        width,
+        height,
+        player_score,
+        music_playing,
+        game_music,
+      },
     } = this;
     ctx.clearRect(0, 0, width, height);
     col_ctx.clearRect(0, 0, width, height);
