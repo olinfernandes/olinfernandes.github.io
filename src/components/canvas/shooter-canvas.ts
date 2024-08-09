@@ -6,9 +6,56 @@ import marsMusicSfx from "./sounds/Mars.wav";
 import mercuryMusicSfx from "./sounds/Mercury.wav";
 import venusMusicSfx from "./sounds/Venus.wav";
 
-let music_playlist = [marsMusicSfx, mercuryMusicSfx, venusMusicSfx];
+let music_playlist = [mercuryMusicSfx, venusMusicSfx, marsMusicSfx];
 
-class Particles {}
+class Particle {
+  x: number;
+  y: number;
+  size: number;
+  color: string;
+  radius: number;
+  max_radius: number;
+  speed_x: number;
+  marked_for_deletion: boolean;
+
+  constructor(x: number, y: number, size: number, color: string) {
+    this.size = size;
+    this.x = x + this.size * 0.5 + Math.random() * 50 - 25;
+    this.y = y + this.size * 0.3 + Math.random() * 50 - 25;;
+    this.color = color;
+    this.radius = Math.random() * this.size * 0.1;
+    this.max_radius = Math.random() * 20 + 35;
+    this.marked_for_deletion = false;
+    this.speed_x = Math.random() * 1 + 0.5;
+  }
+
+  update() {
+    this.x += this.speed_x;
+    this.radius += 0.3;
+    if (this.radius > this.max_radius - 5) this.marked_for_deletion = true;
+  }
+
+  draw(ctx: CanvasRenderingContext2D) {
+    ctx.save()
+    ctx.globalAlpha = 1 - this.radius / this.max_radius;
+    ctx.beginPath();
+    ctx.fillStyle = this.color;
+    ctx.arc(
+      this.x,
+      this.y,
+      this.radius,
+      0,
+      Math.PI * 2
+    );
+    ctx.fill();
+    ctx.restore();
+  }
+
+  start({ ctx }: { ctx: CanvasRenderingContext2D }) {
+    this.update();
+    this.draw(ctx);
+  }
+}
 
 class Explosion {
   x: number;
@@ -97,6 +144,7 @@ class Raven {
   flap_interval: number;
   random_colors: number[];
   color: string;
+  has_particle: boolean;
 
   constructor(canvas: { width: number; height: number }) {
     this.image = new Image();
@@ -123,9 +171,14 @@ class Raven {
       Math.floor(Math.random() * 255),
     ];
     this.color = `rgb(${this.random_colors.join(", ")})`;
+    this.has_particle = Math.random() > 0.5;
   }
 
-  update(dTime: number, game_over: { value: boolean }) {
+  update(
+    dTime: number,
+    game_over: { value: boolean },
+    particle_objects: { value: Particle[] }
+  ) {
     if (this.y < 0 || this.y > this.canvas.height - this.height) {
       this.directionY *= -1;
     }
@@ -143,6 +196,11 @@ class Raven {
       if (this.frame > this.frames) this.frame = 0;
       else this.frame++;
       this.last_flap = 0;
+      if(this.has_particle){
+        particle_objects.value.push(
+          new Particle(this.x, this.y, this.width, this.color)
+        );
+      }
     }
   }
 
@@ -159,7 +217,7 @@ class Raven {
       this.y + this.height * 0.5,
       this.width * 0.5,
       0,
-      2 * Math.PI
+      Math.PI * 2
     );
     col_ctx.fillStyle = this.color;
     col_ctx.fill();
@@ -182,9 +240,10 @@ class Raven {
       col_ctx,
     }: { ctx: CanvasRenderingContext2D; col_ctx: CanvasRenderingContext2D },
     dTime: number,
-    game_over: { value: boolean }
+    game_over: { value: boolean },
+    particle_objects: { value: Particle[] }
   ) {
-    this.update(dTime, game_over);
+    this.update(dTime, game_over, particle_objects);
     this.draw({ ctx, col_ctx });
   }
 }
@@ -268,6 +327,7 @@ type ShooterCanvasProps = {
   position: DOMRect;
   width: number;
   height: number;
+  particle_objects: { value: Particle[] };
   enemy_objects: { value: Raven[] };
   explosion_objects: { value: Explosion[] };
   enemy_number: { value: number };
@@ -314,6 +374,7 @@ class ShooterCanvas extends ShooterCanvasTemplate {
       position: canvas.getBoundingClientRect(),
       width: 500,
       height: 700,
+      particle_objects: super.signal([]),
       enemy_objects: super.signal([]),
       explosion_objects: super.signal([]),
       enemy_number: super.signal(1),
@@ -379,6 +440,7 @@ class ShooterCanvas extends ShooterCanvasTemplate {
         prev_timestamp,
         time_to_spawn,
         spawn_interval,
+        particle_objects,
         enemy_objects,
         explosion_objects,
         game_over,
@@ -394,6 +456,9 @@ class ShooterCanvas extends ShooterCanvasTemplate {
     }
 
     {
+      particle_objects.value = particle_objects.value.filter(
+        ({ marked_for_deletion }) => !marked_for_deletion
+      );
       enemy_objects.value = enemy_objects.value.filter(
         ({ marked_for_deletion }) => !marked_for_deletion
       );
@@ -414,8 +479,12 @@ class ShooterCanvas extends ShooterCanvasTemplate {
 
       enemy_objects.value.sort((a, b) => a.size - b.size);
 
-      [...enemy_objects.value, ...explosion_objects.value].forEach(object => {
-        object.start({ ctx, col_ctx }, dTime, game_over);
+      [
+        ...particle_objects.value,
+        ...enemy_objects.value,
+        ...explosion_objects.value,
+      ].forEach(object => {
+        object.start({ ctx, col_ctx }, dTime, game_over, particle_objects);
       });
     }
 
