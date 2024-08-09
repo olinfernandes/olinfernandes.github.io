@@ -6,12 +6,7 @@ import marsMusicSfx from "./sounds/Mars.wav";
 import mercuryMusicSfx from "./sounds/Mercury.wav";
 import venusMusicSfx from "./sounds/Venus.wav";
 
-let music_playlist = [
-  gameMusicSfx,
-  marsMusicSfx,
-  mercuryMusicSfx,
-  venusMusicSfx,
-];
+let music_playlist = [marsMusicSfx, mercuryMusicSfx, venusMusicSfx];
 
 class Particles {}
 
@@ -102,6 +97,7 @@ class Raven {
   flap_interval: number;
   random_colors: number[];
   color: string;
+
   constructor(canvas: { width: number; height: number }) {
     this.image = new Image();
     this.image.src = ravenPng.src;
@@ -128,6 +124,7 @@ class Raven {
     ];
     this.color = `rgb(${this.random_colors.join(", ")})`;
   }
+
   update(dTime: number, game_over: { value: boolean }) {
     if (this.y < 0 || this.y > this.canvas.height - this.height) {
       this.directionY *= -1;
@@ -135,6 +132,7 @@ class Raven {
 
     this.x -= this.directionX;
     this.y += this.directionY;
+
     if (this.x < -this.width) {
       this.marked_for_deletion = true;
       game_over.value = true;
@@ -155,8 +153,16 @@ class Raven {
     ctx: CanvasRenderingContext2D;
     col_ctx: CanvasRenderingContext2D;
   }) {
+    col_ctx.beginPath();
+    col_ctx.arc(
+      this.x + this.width * 0.5,
+      this.y + this.height * 0.5,
+      this.width * 0.5,
+      0,
+      2 * Math.PI
+    );
     col_ctx.fillStyle = this.color;
-    col_ctx.fillRect(this.x, this.y, this.width, this.height);
+    col_ctx.fill();
     ctx.drawImage(
       this.image,
       this.frame * this.sprite_width,
@@ -169,6 +175,7 @@ class Raven {
       this.height
     );
   }
+
   start(
     {
       ctx,
@@ -234,7 +241,7 @@ class ShooterCanvasTemplate extends SignalElement {
       `
       .wrapper {
         position: relative;
-        background: linear-gradient(120deg, blue, green, yellow);
+        background: linear-gradient(120deg, red, blue, green);
         height: 100%;
         width: 100%;
         overflow: hidden;
@@ -273,6 +280,8 @@ type ShooterCanvasProps = {
   player_score: { value: number };
   game_over: { value: boolean };
   game_music: HTMLAudioElement;
+  current_track: { value: number };
+  music_playing: { value: boolean };
 };
 
 class ShooterCanvas extends ShooterCanvasTemplate {
@@ -317,6 +326,8 @@ class ShooterCanvas extends ShooterCanvasTemplate {
       player_score: super.signal(0),
       game_over: super.signal(false),
       game_music: new Audio(),
+      current_track: super.signal(0),
+      music_playing: super.signal(false),
     };
 
     this.canvas.width =
@@ -328,20 +339,31 @@ class ShooterCanvas extends ShooterCanvasTemplate {
       collision_canvas.height =
         window.innerHeight - 16 * 8;
     this.canvas.ctx.font = "50px Impact";
+    this.canvas.game_music.volume = 0.15;
   }
 
   connectedCallback() {
+    const {
+      canvas: { current_track, game_music },
+    } = this;
     super.effect(() => {
       this.gameDifficulty();
+      this.gameMusic();
     });
 
     this.addEventListener("click", this.handleClick);
+    game_music.addEventListener("ended", () => {
+      current_track.value + 1 < music_playlist.length
+        ? current_track.value++
+        : (current_track.value = 0);
+    });
 
     this.drawGameStart();
   }
 
   disconnectedCallback() {
     this.removeEventListener("click", this.handleClick);
+    this.canvas.game_music.removeEventListener("ended", () => {});
   }
 
   loop(timestamp: number, instance: ShooterCanvas = this) {
@@ -365,7 +387,7 @@ class ShooterCanvas extends ShooterCanvasTemplate {
     {
       ctx.clearRect(0, 0, width, height);
       col_ctx.clearRect(0, 0, width, height);
-      this.drawPlayerScore();
+      instance.drawPlayerScore();
     }
 
     {
@@ -406,7 +428,7 @@ class ShooterCanvas extends ShooterCanvasTemplate {
 
   drawPlayerScore() {
     const {
-      canvas: { ctx, player_score, game_speed },
+      canvas: { ctx, player_score, game_speed, music_playing },
     } = this;
     ctx.fillStyle = "#333";
     ctx.fillText("Score: " + player_score.value, 50, 75);
@@ -414,11 +436,12 @@ class ShooterCanvas extends ShooterCanvasTemplate {
     ctx.fillStyle = "#fff";
     ctx.fillText("Score: " + player_score.value, 55, 80);
     ctx.fillText("Game Speed: " + game_speed.value, 55, 144);
+    music_playing.value = true;
   }
 
   drawGameStart() {
     const {
-      canvas: { ctx, width, height },
+      canvas: { ctx, width, height, music_playing, game_music },
     } = this;
     ctx.clearRect(0, 0, width, height);
 
@@ -429,13 +452,16 @@ class ShooterCanvas extends ShooterCanvasTemplate {
     ctx.fillStyle = "#fff";
     ctx.fillText("Click to Start!!", width * 0.5, height * 0.5);
     ctx.restore();
+    music_playing.value = false;
+    game_music.pause();
   }
 
   drawGameOver() {
     const {
-      canvas: { ctx, width, height, player_score },
+      canvas: { ctx, col_ctx, width, height, player_score, music_playing, game_music },
     } = this;
     ctx.clearRect(0, 0, width, height);
+    col_ctx.clearRect(0, 0, width, height);
 
     ctx.fillStyle = "#333";
     ctx.fillText(
@@ -449,40 +475,15 @@ class ShooterCanvas extends ShooterCanvasTemplate {
       width * 0.3,
       height * 0.5
     );
-  }
-
-  playMusic() {
-    let currentTrack = 0;
-    const {
-      canvas: { game_music, game_over },
-    } = this;
-
-    game_music.addEventListener("ended", () => {
-      if (currentTrack === music_playlist.length) {
-        game_music.src = music_playlist[0];
-        game_music.play();
-        return;
-      }
-      game_music.src = music_playlist[currentTrack];
-      game_music.play();
-      currentTrack++;
-    });
-
-    game_music.volume = 0.15;
-    game_music.src = music_playlist[0];
-    game_music.play();
-
-    super.effect(() => {
-      if (game_over.value) {
-        game_music.pause();
-        game_music.load();
-      }
-    });
+    music_playing.value = false;
+    game_music.pause();
+    music_playing.value = true;
   }
 
   resetGame() {
     const {
       canvas: {
+        game_music,
         game_frame,
         game_over,
         game_speed,
@@ -491,6 +492,7 @@ class ShooterCanvas extends ShooterCanvasTemplate {
         explosion_objects,
         prev_timestamp,
         enemy_number,
+        music_playing,
       },
     } = this;
 
@@ -502,7 +504,8 @@ class ShooterCanvas extends ShooterCanvasTemplate {
     explosion_objects.value = [];
     prev_timestamp.value = 0;
     enemy_number.value = 1;
-    this.playMusic();
+    music_playing.value = false;
+    game_music.pause();
     this.loop(game_frame.value);
   }
 
@@ -526,7 +529,6 @@ class ShooterCanvas extends ShooterCanvasTemplate {
         break;
       case 25:
         game_speed.value = 20;
-        enemy_number.value = 3;
         for (let i = 0; i < enemy_number.value; i++) {
           enemy_objects.value.push(new Raven({ width, height }));
         }
@@ -544,7 +546,18 @@ class ShooterCanvas extends ShooterCanvasTemplate {
         }
       case 100:
         game_speed.value = 160;
-        enemy_number.value = 6;
+        for (let i = 0; i < enemy_number.value; i++) {
+          enemy_objects.value.push(new Raven({ width, height }));
+        }
+        break;
+      case 125:
+        game_speed.value = 200;
+        for (let i = 0; i < enemy_number.value; i++) {
+          enemy_objects.value.push(new Raven({ width, height }));
+        }
+        break;
+      case 150:
+        game_speed.value = 250;
         for (let i = 0; i < enemy_number.value; i++) {
           enemy_objects.value.push(new Raven({ width, height }));
         }
@@ -554,58 +567,69 @@ class ShooterCanvas extends ShooterCanvasTemplate {
     }
   }
 
+  gameMusic() {
+    const {
+      canvas: { game_over, game_music, current_track, music_playing },
+    } = this;
+    if (music_playing.value && !game_music.paused) {
+      return;
+    } else if (music_playing.value) {
+      if (game_over.value) {
+        game_music.pause();
+        game_music.src = gameMusicSfx;
+        game_music.loop = true;
+      } else {
+        game_music.pause();
+        game_music.src = music_playlist[current_track.value];
+        game_music.loop = false;
+      }
+      game_music.play();
+    } else if (!music_playing.value && !game_music.paused) {
+      game_music.pause();
+    }
+  }
+
   handleClick(e: MouseEvent) {
     const {
       canvas: {
+        position,
         game_frame,
         game_over,
         col_ctx,
         enemy_objects,
         player_score,
         explosion_objects,
-        enemy_number,
-        width,
-        height,
       },
     } = this;
-    if (!game_frame.value) {
-      this.playMusic();
+
+    if (game_frame.value === 0) {
       this.loop(game_frame.value);
-      return;
-    }
-
-    if (game_over.value) {
+    } else if (game_over.value) {
       this.resetGame();
-      return;
-    }
+    } else {
+      const detectedPixelColor = col_ctx.getImageData(
+        e.clientX - position.left,
+        e.clientY - position.top,
+        1,
+        1
+      ).data;
 
-    const detectPixelColor = col_ctx.getImageData(
-      e.offsetX,
-      e.offsetY,
-      1,
-      1
-    ).data;
-    enemy_objects.value.forEach(object => {
-      let isMatch = detectPixelColor.reduce((result, current, i) => {
-        if (result === false) return false;
-        if (i === 3) return result;
-        return current === object.random_colors[i];
-      }, true);
+      enemy_objects.value.forEach(object => {
+        let isMatch = detectedPixelColor.reduce((result, current, i) => {
+          if (result === false) return result;
+          if (i > 2) return result;
+          return current === object.random_colors[i];
+        }, true);
 
-      if (isMatch) {
-        player_score.value++;
-        object.marked_for_deletion = true;
-        explosion_objects.value.push(
-          new Explosion(object.x, object.y, object.width)
-        );
-        if (game_frame.value % 1e3 === 0) {
-          enemy_number.value++;
-          for (let i = 0; i < enemy_number.value; i++) {
-            enemy_objects.value.push(new Raven({ width, height }));
-          }
+        if (isMatch) {
+          player_score.value++;
+          object.marked_for_deletion = true;
+          explosion_objects.value.push(
+            new Explosion(object.x, object.y, object.width)
+          );
         }
-      }
-    });
+      });
+    }
   }
 }
 
