@@ -1,4 +1,4 @@
-import ravenPng from "./enemies/enemy5.png";
+import ravenPng from "./enemies/raven.png";
 import explosionPng from "./effects/boom.png";
 import explosionSfx from "./effects/boom.wav";
 import gameMusicSfx from "./sounds/game_music.mp3";
@@ -26,7 +26,7 @@ class Particle {
     this.radius = Math.random() * this.size * 0.1;
     this.max_radius = Math.random() * 20 + 35;
     this.marked_for_deletion = false;
-    this.speed_x = Math.random() * 1 + 0.5;
+    this.speed_x = Math.random() + 0.5;
   }
 
   update() {
