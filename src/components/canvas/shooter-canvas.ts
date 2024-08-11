@@ -1,4 +1,4 @@
-import ravenPng from "./enemies/raven.png";
+import ravenPng from "./enemies/enemy5.png";
 import explosionPng from "./effects/boom.png";
 import explosionSfx from "./effects/boom.wav";
 import gameMusicSfx from "./sounds/game_music.mp3";
@@ -21,7 +21,7 @@ class Particle {
   constructor(x: number, y: number, size: number, color: string) {
     this.size = size;
     this.x = x + this.size * 0.5 + Math.random() * 50 - 25;
-    this.y = y + this.size * 0.3 + Math.random() * 50 - 25;;
+    this.y = y + this.size * 0.3 + Math.random() * 50 - 25;
     this.color = color;
     this.radius = Math.random() * this.size * 0.1;
     this.max_radius = Math.random() * 20 + 35;
@@ -36,17 +36,11 @@ class Particle {
   }
 
   draw(ctx: CanvasRenderingContext2D) {
-    ctx.save()
+    ctx.save();
     ctx.globalAlpha = 1 - this.radius / this.max_radius;
     ctx.beginPath();
     ctx.fillStyle = this.color;
-    ctx.arc(
-      this.x,
-      this.y,
-      this.radius,
-      0,
-      Math.PI * 2
-    );
+    ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
     ctx.fill();
     ctx.restore();
   }
@@ -102,9 +96,6 @@ class Explosion {
   }
 
   draw({ ctx }: { ctx: CanvasRenderingContext2D }) {
-    // ctx.save();
-    // ctx.translate(this.x, this.y);
-    // ctx.rotate(this.angle);
     ctx.drawImage(
       this.image,
       this.frame * this.sprite_width,
@@ -116,7 +107,6 @@ class Explosion {
       this.width,
       this.height
     );
-    // ctx.restore();
   }
 
   start({ ctx }: { ctx: CanvasRenderingContext2D }, dTime: number) {
@@ -171,7 +161,7 @@ class Raven {
       Math.floor(Math.random() * 255),
     ];
     this.color = `rgb(${this.random_colors.join(", ")})`;
-    this.has_particle = Math.random() > 0.5;
+    this.has_particle = Math.random() > 0.3;
   }
 
   update(
@@ -196,10 +186,12 @@ class Raven {
       if (this.frame > this.frames) this.frame = 0;
       else this.frame++;
       this.last_flap = 0;
-      if(this.has_particle){
-        particle_objects.value.push(
-          new Particle(this.x, this.y, this.width, this.color)
-        );
+      if (this.has_particle) {
+        for (let i = 0; i < 3; i++) {
+          particle_objects.value.push(
+            new Particle(this.x, this.y, this.width, this.color)
+          );
+        }
       }
     }
   }
@@ -438,6 +430,7 @@ class ShooterCanvas extends ShooterCanvasTemplate {
         width,
         height,
         prev_timestamp,
+        enemy_number,
         time_to_spawn,
         spawn_interval,
         particle_objects,
@@ -473,7 +466,9 @@ class ShooterCanvas extends ShooterCanvasTemplate {
       time_to_spawn.value += dTime;
 
       if (time_to_spawn.value > spawn_interval.value) {
-        enemy_objects.value.push(new Raven({ width, height }));
+        for (let i = 0; i < enemy_number.value; i++) {
+          enemy_objects.value.push(new Raven({ width, height }));
+        }
         time_to_spawn.value = 0;
       }
 
@@ -570,78 +565,61 @@ class ShooterCanvas extends ShooterCanvasTemplate {
         player_score,
         enemy_objects,
         explosion_objects,
+        time_to_spawn,
         prev_timestamp,
         enemy_number,
         music_playing,
       },
     } = this;
 
-    game_over.value = false;
-    game_frame.value = 0;
-    game_speed.value = 5;
-    player_score.value = 0;
-    enemy_objects.value = [];
-    explosion_objects.value = [];
-    prev_timestamp.value = 0;
-    enemy_number.value = 1;
-    music_playing.value = false;
-    game_music.pause();
-    this.loop(game_frame.value);
+    {
+      game_over.value = false;
+      game_frame.value = 0;
+      game_speed.value = 5;
+      player_score.value = 0;
+      enemy_objects.value = [];
+      explosion_objects.value = [];
+      time_to_spawn.value = 0;
+      prev_timestamp.value = 0;
+      enemy_number.value = 1;
+      music_playing.value = false;
+    }
+    {
+      game_music.pause();
+      this.loop(game_frame.value);
+    }
   }
 
   gameDifficulty() {
     const {
-      canvas: {
-        player_score,
-        game_speed,
-        enemy_number,
-        enemy_objects,
-        width,
-        height,
-      },
+      canvas: { player_score, game_speed, enemy_number },
     } = this;
     switch (player_score.value) {
       case 10:
         game_speed.value = 10;
-        for (let i = 0; i < enemy_number.value; i++) {
-          enemy_objects.value.push(new Raven({ width, height }));
-        }
+        enemy_number.value = 2;
         break;
       case 25:
         game_speed.value = 20;
-        for (let i = 0; i < enemy_number.value; i++) {
-          enemy_objects.value.push(new Raven({ width, height }));
-        }
         break;
       case 50:
         game_speed.value = 40;
-        for (let i = 0; i < enemy_number.value; i++) {
-          enemy_objects.value.push(new Raven({ width, height }));
-        }
         break;
       case 80:
         game_speed.value = 80;
-        for (let i = 0; i < enemy_number.value; i++) {
-          enemy_objects.value.push(new Raven({ width, height }));
-        }
       case 100:
         game_speed.value = 160;
-        for (let i = 0; i < enemy_number.value; i++) {
-          enemy_objects.value.push(new Raven({ width, height }));
-        }
+        enemy_number.value = 3;
         break;
       case 125:
         game_speed.value = 200;
-        for (let i = 0; i < enemy_number.value; i++) {
-          enemy_objects.value.push(new Raven({ width, height }));
-        }
         break;
       case 150:
         game_speed.value = 250;
-        for (let i = 0; i < enemy_number.value; i++) {
-          enemy_objects.value.push(new Raven({ width, height }));
-        }
         break;
+      case 200:
+        game_speed.value = 300;
+        enemy_number.value = 4;
       default:
         break;
     }
@@ -655,11 +633,11 @@ class ShooterCanvas extends ShooterCanvasTemplate {
       return;
     } else if (music_playing.value) {
       if (game_over.value) {
-        game_music.pause();
+        if (!game_music.paused) game_music.pause();
         game_music.src = gameMusicSfx;
         game_music.loop = true;
       } else {
-        game_music.pause();
+        if (!game_music.paused) game_music.pause();
         game_music.src = music_playlist[current_track.value];
         game_music.loop = false;
       }
@@ -702,7 +680,9 @@ class ShooterCanvas extends ShooterCanvasTemplate {
         }, true);
 
         if (isMatch) {
-          player_score.value++;
+          object.has_particle
+            ? (player_score.value += 2)
+            : player_score.value++;
           object.marked_for_deletion = true;
           explosion_objects.value.push(
             new Explosion(object.x, object.y, object.width)
@@ -713,4 +693,6 @@ class ShooterCanvas extends ShooterCanvasTemplate {
   }
 }
 
-window.customElements.define("shooter-canvas", ShooterCanvas);
+window.addEventListener("load", () => {
+  window.customElements.define("shooter-canvas", ShooterCanvas);
+});
