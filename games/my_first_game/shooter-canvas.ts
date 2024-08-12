@@ -352,6 +352,7 @@ window.addEventListener("load", () => {
     }
 
     canvas: ShooterCanvasProps;
+
     constructor() {
       super();
       this.attachShadow({ mode: "open" });
@@ -543,18 +544,21 @@ window.addEventListener("load", () => {
       ctx.clearRect(0, 0, width, height);
       col_ctx.clearRect(0, 0, width, height);
 
+      ctx.save();
+      ctx.textAlign = 'center';
       ctx.fillStyle = "#333";
       ctx.fillText(
         "GAME OVER!! Your Score is: " + player_score.value,
-        width * 0.3 + 6,
+        width * 0.5 + 6,
         height * 0.5 + 6,
       );
       ctx.fillStyle = "#fff";
       ctx.fillText(
         "GAME OVER!! Your Score is: " + player_score.value,
-        width * 0.3,
+        width * 0.5,
         height * 0.5,
       );
+      ctx.restore();
       music_playing.value = false;
       game_music.pause();
       music_playing.value = true;
