@@ -1,7 +1,6 @@
 ---
-import Header from "../src/components/Header.astro";
-import Footer from "../src/components/Footer.astro";
-import MyFirstGame from "./my_first_game/shooter.astro";
+import Header from "../components/Header.astro";
+import Footer from "../components/Footer.astro";
 ---
 
 <html lang="en">
@@ -15,7 +14,14 @@ import MyFirstGame from "./my_first_game/shooter.astro";
 
     <main>
       <game-selection>
-        <MyFirstGame />
+        <nav>
+          <li>
+            <a href="/games/shooter">Shooter</a>
+          </li>
+          <li>
+            <a href="/games/memory">Memory</a>
+          </li>
+        </nav>
       </game-selection>
 
       <script>

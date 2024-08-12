@@ -1,16 +1,13 @@
-import ravenPng from "../assets/raven.png";
+import ravenPng from "./assets/raven.png";
+import explosionPng from "./assets/boom.png";
 
-import explosionPng from "../assets/boom.png";
-
-import explosionSfx from "../assets/boom.wav";
-import game_musicSfx from "../assets/game_music.mp3";
-import marsMusicSfx from "../assets/Mars.wav";
-import mercuryMusicSfx from "../assets/Mercury.wav";
-import venusMusicSfx from "../assets/Venus.wav";
+import explosionSfx from "./assets/boom.wav";
+import game_musicSfx from "./assets/game_music.mp3";
+import marsMusicSfx from "./assets/Mars.wav";
+import mercuryMusicSfx from "./assets/Mercury.wav";
+import venusMusicSfx from "./assets/Venus.wav";
 
 window.addEventListener("load", () => {
-  let music_playlist = [mercuryMusicSfx, venusMusicSfx, marsMusicSfx];
-
   interface CanvasContext {
     ctx: CanvasRenderingContext2D;
   }
@@ -189,8 +186,9 @@ window.addEventListener("load", () => {
         this.directionY *= -1;
       }
 
-      this.x -= this.directionX + Math.sin(this.angle);
-      this.y += this.directionY;
+      this.x -= this.directionX;
+      this.y += this.directionY + Math.sin(this.angle);
+      this.angle++;
 
       if (this.x < -this.width) {
         this.marked_for_deletion = true;
@@ -339,6 +337,7 @@ window.addEventListener("load", () => {
     game_music: HTMLAudioElement;
     current_track: { value: number };
     music_playing: { value: boolean };
+    music_playlist: string[];
   };
 
   class ShooterCanvas extends ShooterCanvasTemplate {
@@ -387,6 +386,7 @@ window.addEventListener("load", () => {
         game_music: new Audio(),
         current_track: super.signal(0),
         music_playing: super.signal(false),
+        music_playlist: [mercuryMusicSfx, venusMusicSfx, marsMusicSfx],
       };
 
       this.canvas.width =
@@ -403,7 +403,7 @@ window.addEventListener("load", () => {
 
     connectedCallback() {
       const {
-        canvas: { current_track, game_music },
+        canvas: { current_track, game_music, music_playlist },
       } = this;
 
       super.effect(() => {
@@ -545,7 +545,7 @@ window.addEventListener("load", () => {
       col_ctx.clearRect(0, 0, width, height);
 
       ctx.save();
-      ctx.textAlign = 'center';
+      ctx.textAlign = "center";
       ctx.fillStyle = "#333";
       ctx.fillText(
         "GAME OVER!! Your Score is: " + player_score.value,
@@ -631,7 +631,13 @@ window.addEventListener("load", () => {
 
     game_music() {
       const {
-        canvas: { game_over, game_music, current_track, music_playing },
+        canvas: {
+          game_over,
+          game_music,
+          current_track,
+          music_playing,
+          music_playlist,
+        },
       } = this;
       if (music_playing.value && !game_music.paused) {
         return;

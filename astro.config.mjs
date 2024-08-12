@@ -3,7 +3,7 @@ import mdx from "@astrojs/mdx";
 import sitemap from "@astrojs/sitemap";
 import compress from "astro-compress";
 import tailwind from "@astrojs/tailwind";
-import games from "./games/integration";
+import games from "./src/games/integration";
 
 // https://astro.build/config
 export default defineConfig({

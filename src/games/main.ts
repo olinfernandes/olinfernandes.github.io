@@ -13,7 +13,7 @@ window.addEventListener("load", () => {
         },
         set value(updated) {
           value = updated;
-          subscriptions.forEach((fn) => fn());
+          subscriptions.forEach(fn => fn());
         },
       };
     };
@@ -45,6 +45,19 @@ window.addEventListener("load", () => {
       super();
       this.attachShadow({ mode: "open" });
       this.shadowRoot?.appendChild(super.template.content.cloneNode(true));
+
+      {
+        let navEl = this.querySelector("nav");
+        if (navEl) {
+          navEl.style.display = "grid";
+          this.querySelectorAll("li").forEach(el => {
+            Object.assign(el.style, {
+              placeSelf: "center",
+              listStyle: "none",
+            });
+          });
+        }
+      }
 
       Object.assign(this.style, {
         display: "grid",
