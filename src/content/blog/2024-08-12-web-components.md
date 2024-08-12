@@ -3,11 +3,12 @@ title: Web Components
 description: A set of standards for building reusable and encapsulated components.
 pubDate: 2024-08-12T06:58:15.524Z
 updateDate: 2024-08-12T06:58:15.524Z
-preview: ./images/blog-placeholder-3.jpg
-heroImage: ./images/blog-placeholder-3.jpg
+preview: ./images/blog-placeholder-6.jpg
+heroImage: ./images/blog-placeholder-6.jpg
 draft: false
 tags:
   - internet
+  - javascript
 categories:
   - web
 type: blog
