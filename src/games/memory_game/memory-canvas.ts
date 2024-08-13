@@ -1,5 +1,28 @@
 window.addEventListener("load", () => {
-  class MemoeryCanvasTemplate extends HTMLElement {
+  class Game {
+    constructor() { }
+
+    update() { }
+
+    draw() { }
+
+    start() {
+      this.update();
+      this.draw();
+    }
+  }
+
+  class Enemy {
+    game: Game
+    constructor(game: Game) {
+      this.game = game;
+    }
+
+    update() { }
+    draw() { }
+  }
+
+  class MemoryCanvasTemplate extends HTMLElement {
     get template() {
       const t = document.createElement("template");
       t.innerHTML = `
@@ -21,7 +44,7 @@ window.addEventListener("load", () => {
     }
   }
 
-  class MemoryCanvas extends MemoeryCanvasTemplate {
+  class MemoryCanvas extends MemoryCanvasTemplate {
     constructor() {
       super();
       this.attachShadow({ mode: "open" });
@@ -35,9 +58,9 @@ window.addEventListener("load", () => {
       canvas.height = window.innerHeight - 16 * 8;
     }
 
-    connectedCallback() {}
-    disconnectedCallback() {}
-    loop() {}
+    connectedCallback() { }
+    disconnectedCallback() { }
+    loop() { }
   }
 
   window.customElements.define("memory-canvas", MemoryCanvas);
