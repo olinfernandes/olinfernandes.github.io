@@ -1,7 +1,6 @@
 ---
 import { getEntry } from "astro:content";
 import Layout from "../layouts/BlogPost.astro";
-import heroImage from "../content/blog/images/blog-placeholder-about.jpg";
 
 const {
   data: { title, pubDate, draft },
@@ -10,6 +9,6 @@ const {
 const { Content } = await render();
 ---
 
-<Layout title={title} description="" pubDate={pubDate} heroImage={heroImage}>
+<Layout title={title} description="" pubDate={pubDate}>
   {!draft && <Content />}
 </Layout>
