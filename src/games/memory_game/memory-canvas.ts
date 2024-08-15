@@ -5,7 +5,7 @@ type CanvasConfig = {
   col_ctx: CanvasRenderingContext2D;
   width: number;
   height: number;
-  matched: { value: string };
+  matched: { value: Set<string> };
   selected: {
     coordinate: { value: { row: number; col: number } | null };
     color: { value: string | null };
@@ -30,7 +30,6 @@ window.addEventListener("load", () => {
     constructor(config: CanvasConfig) {
       this.config = config;
       this.color_matrix = this.random_colors_matrix;
-      this.drawCollisionGrid(this.color_matrix);
     }
 
     update() {}
@@ -38,6 +37,7 @@ window.addEventListener("load", () => {
     draw() {
       const { ctx, width, height } = this.config;
       ctx.clearRect(0, 0, width, height);
+      this.drawCollisionGrid(this.color_matrix);
     }
 
     render() {
@@ -46,7 +46,7 @@ window.addEventListener("load", () => {
     }
 
     private drawCollisionGrid(color_matrix: string[][]) {
-      const { col_ctx, width, height } = this.config;
+      const { col_ctx, width, height, matched } = this.config;
       col_ctx.clearRect(0, 0, width, height);
       const gridCell = {
         width: width / color_matrix[0].length,
@@ -57,7 +57,7 @@ window.addEventListener("load", () => {
       color_matrix.forEach((colums, row_index) => {
         colums.forEach((column, col_index) => {
           col_ctx.save();
-          col_ctx.fillStyle = `${column}`;
+          col_ctx.fillStyle = matched.value.has(column) ? "white" : `${column}`;
           col_ctx.fillRect(
             col_index * (gridCell.width + gridCell.border_size),
             row_index * (gridCell.height + gridCell.border_size),
@@ -103,7 +103,8 @@ window.addEventListener("load", () => {
     }
 
     handleClick = (e: MouseEvent) => {
-      const { position, col_ctx, width, height, selected, matched } = this.config;
+      const { position, col_ctx, width, height, selected, matched } =
+        this.config;
       const x = e.clientX - position.left;
       const y = e.clientY - position.top;
       const rows = 3;
@@ -112,13 +113,53 @@ window.addEventListener("load", () => {
         col: Math.floor((x * columns) / width),
         row: Math.floor((y * rows) / height),
       };
-      const detectedColor = col_ctx.getImageData(x, y, 1, 1).data;
-      const detectedColorRgb = `rgb${detectedColor.join(", ")}`;
-      const detectedColorHex = rgbToHex(detectedColorRgb);
-      console.log({
-        coordinate,
-        detectedColorHex,
-      });
+      if (
+        coordinate.row >= 0 &&
+        coordinate.row < rows &&
+        coordinate.col >= 0 &&
+        coordinate.col < columns
+      ) {
+        const detectedColor = col_ctx.getImageData(x, y, 1, 1).data;
+        const detectedColorRgb = `rgb${detectedColor.join(", ")}`;
+        const detectedColorHex = rgbToHex(detectedColorRgb);
+
+        const resetSelected = () => {
+          selected.color.value = null;
+          selected.coordinate.value = null;
+        };
+
+        if (!selected.color.value) {
+          selected.color.value = detectedColorHex;
+          selected.coordinate.value = coordinate;
+        } else if (
+          selected.color.value === detectedColorHex &&
+          selected.coordinate.value
+        ) {
+          if (
+            coordinate.col === selected.coordinate.value.col &&
+            coordinate.row === selected.coordinate.value.row
+          ) {
+            // clicked on same coordinate
+            resetSelected();
+            return;
+          } else if (
+            coordinate.col !== selected.coordinate.value.col ||
+            coordinate.row !== selected.coordinate.value.row
+          ) {
+            // matched
+            matched.value.add(selected.color.value);
+            resetSelected();
+          } else {
+            // catch all
+            resetSelected();
+          }
+        } else {
+          // catch all
+          resetSelected();
+        }
+      } else {
+        // clicked out of bounds
+      }
     };
   }
 
@@ -215,7 +256,7 @@ window.addEventListener("load", () => {
         height:
           (canvas.height = collision_canvas.height =
             window.innerHeight - 16 * 8),
-        matched: super.signal(),
+        matched: super.signal(new Set()),
         selected: {
           coordinate: super.signal(null),
           color: super.signal(null),
