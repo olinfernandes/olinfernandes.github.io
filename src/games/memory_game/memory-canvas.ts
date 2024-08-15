@@ -9,6 +9,15 @@ type CanvasConfig = {
 
 const shuffleSort = () => 0.5 - Math.random();
 
+const rgbToHex = (rgb: string): string => {
+  const rgbValues = rgb.match(/\d+/g);
+  if (!rgbValues || rgbValues.length < 3) return "";
+  const hex = rgbValues.splice(0, 3).map(v => {
+    return parseInt(v).toString(16).padEnd(2, "0");
+  });
+  return `#${hex.join("")}`.toUpperCase();
+};
+
 window.addEventListener("load", () => {
   class Game {
     config: CanvasConfig;
@@ -19,7 +28,7 @@ window.addEventListener("load", () => {
       this.drawCollisionGrid(this.color_matrix);
     }
 
-    update() {}
+    update() { }
 
     draw() {
       const { ctx, width, height } = this.config;
@@ -56,6 +65,8 @@ window.addEventListener("load", () => {
     }
 
     private get random_colors_matrix() {
+      const rows = 3;
+      const columns = 4;
       const _colors_ = [
         "#FF0000",
         "#008000",
@@ -67,9 +78,9 @@ window.addEventListener("load", () => {
       const duplicatedColorArray = _colors_.concat(_colors_);
       let index = 0;
       const colorMatrix: string[][] = [];
-      for (let i = 0; i < 3; i++) {
+      for (let i = 0; i < rows; i++) {
         const gridRow = [];
-        for (let j = 0; j < 4; j++) {
+        for (let j = 0; j < columns; j++) {
           gridRow.push(duplicatedColorArray[index]);
           index++;
         }
@@ -87,19 +98,21 @@ window.addEventListener("load", () => {
     }
 
     handleClick = (e: MouseEvent) => {
-      const { position, ctx } = this.config;
-      const detectedColor = ctx.getImageData(
+      const { position, col_ctx } = this.config;
+      const detectedColor = col_ctx.getImageData(
         e.clientX - position.left,
         e.clientY - position.top,
         1,
         1
-      );
+      ).data;
+      const detectedColorRgb = `rgb${detectedColor.join(", ")}`;
+      const detectedColorHex = rgbToHex(detectedColorRgb);
       console.log({
         coordinate: {
           x: e.clientX - position.left,
           y: e.clientY - position.top,
         },
-        detectedColor,
+        detectedColorHex,
       });
     };
   }
@@ -186,8 +199,12 @@ window.addEventListener("load", () => {
       this.config = {
         element: canvas,
         position: canvas.getBoundingClientRect(),
-        ctx: canvas.getContext("2d") as CanvasRenderingContext2D,
-        col_ctx: collision_canvas.getContext("2d") as CanvasRenderingContext2D,
+        ctx: canvas.getContext("2d", {
+          willReadFrequently: true,
+        }) as CanvasRenderingContext2D,
+        col_ctx: collision_canvas.getContext("2d", {
+          willReadFrequently: true,
+        }) as CanvasRenderingContext2D,
         width:
           (canvas.width = collision_canvas.width = window.innerWidth - 16 * 2),
         height:
@@ -209,7 +226,7 @@ window.addEventListener("load", () => {
       loop();
     }
 
-    disconnectedCallback() {}
+    disconnectedCallback() { }
   }
 
   window.customElements.define("memory-canvas", MemoryCanvas);
