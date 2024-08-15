@@ -5,6 +5,11 @@ type CanvasConfig = {
   col_ctx: CanvasRenderingContext2D;
   width: number;
   height: number;
+  matched: { value: string };
+  selected: {
+    coordinate: { value: { row: number; col: number } | null };
+    color: { value: string | null };
+  };
 };
 
 const shuffleSort = () => 0.5 - Math.random();
@@ -28,7 +33,7 @@ window.addEventListener("load", () => {
       this.drawCollisionGrid(this.color_matrix);
     }
 
-    update() { }
+    update() {}
 
     draw() {
       const { ctx, width, height } = this.config;
@@ -98,20 +103,20 @@ window.addEventListener("load", () => {
     }
 
     handleClick = (e: MouseEvent) => {
-      const { position, col_ctx } = this.config;
-      const detectedColor = col_ctx.getImageData(
-        e.clientX - position.left,
-        e.clientY - position.top,
-        1,
-        1
-      ).data;
+      const { position, col_ctx, width, height, selected, matched } = this.config;
+      const x = e.clientX - position.left;
+      const y = e.clientY - position.top;
+      const rows = 3;
+      const columns = 4;
+      const coordinate = {
+        col: Math.floor((x * columns) / width),
+        row: Math.floor((y * rows) / height),
+      };
+      const detectedColor = col_ctx.getImageData(x, y, 1, 1).data;
       const detectedColorRgb = `rgb${detectedColor.join(", ")}`;
       const detectedColorHex = rgbToHex(detectedColorRgb);
       console.log({
-        coordinate: {
-          x: e.clientX - position.left,
-          y: e.clientY - position.top,
-        },
+        coordinate,
         detectedColorHex,
       });
     };
@@ -210,6 +215,11 @@ window.addEventListener("load", () => {
         height:
           (canvas.height = collision_canvas.height =
             window.innerHeight - 16 * 8),
+        matched: super.signal(),
+        selected: {
+          coordinate: super.signal(null),
+          color: super.signal(null),
+        },
       };
     }
 
@@ -226,7 +236,7 @@ window.addEventListener("load", () => {
       loop();
     }
 
-    disconnectedCallback() { }
+    disconnectedCallback() {}
   }
 
   window.customElements.define("memory-canvas", MemoryCanvas);
