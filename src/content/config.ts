@@ -10,7 +10,7 @@ export const collections = {
         draft: z.boolean().default(false).optional(),
         pubDate: z.coerce.date(),
         updateDate: z.coerce.date().optional(),
-        heroImage: image(),
+        heroImage: image().optional(),
         preview: image().optional(),
         tags: z.array(z.string()).optional(),
         categories: z.array(z.string()).optional(),
