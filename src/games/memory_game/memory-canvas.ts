@@ -23,6 +23,20 @@ const rgbToHex = (rgb: string): string => {
   return `#${hex.join("")}`.toUpperCase();
 };
 
+const random_colors = () => {
+  const color_set = new Set<string>();
+  const gen_ran_col = () => Math.floor(Math.random() * 255);
+
+  while (Array.from(color_set).length < 6) {
+    const color = rgbToHex(
+      `rgb(${gen_ran_col()}, ${gen_ran_col()}, ${gen_ran_col()})`
+    );
+    color_set.add(color);
+  }
+
+  return Array.from(color_set);
+};
+
 class Game {
   config: CanvasConfig;
   color_matrix: string[][];
@@ -34,7 +48,9 @@ class Game {
   update(d_time: number) {}
 
   draw() {
-    const { ctx, width, height } = this.config;
+    const {
+      config: { ctx, width, height },
+    } = this;
     ctx.clearRect(0, 0, width, height);
     this.drawCollisionGrid(this.color_matrix);
   }
@@ -44,8 +60,10 @@ class Game {
     this.draw();
   }
 
-  private drawCollisionGrid(color_matrix: string[][]) {
-    const { col_ctx, width, height, matched } = this.config;
+  private drawCollisionGrid = (color_matrix: string[][]) => {
+    const {
+      config: { col_ctx, width, height, matched },
+    } = this;
     col_ctx.clearRect(0, 0, width, height);
     const gridCell = {
       width: width / color_matrix[0].length,
@@ -66,24 +84,11 @@ class Game {
         col_ctx.restore();
       });
     });
-  }
+  };
 
   private get random_colors_matrix() {
     const rows = 3;
     const columns = 4;
-    const random_colors = () => {
-      const color_set = new Set<string>();
-      const gen_ran_col = () => Math.floor(Math.random() * 255);
-
-      while (Array.from(color_set).length < 6) {
-        const color = rgbToHex(
-          `rgb(${gen_ran_col()}, ${gen_ran_col()}, ${gen_ran_col()})`
-        );
-        color_set.add(color);
-      }
-
-      return Array.from(color_set);
-    };
     const _colors_ = random_colors().sort(shuffleSort);
     const duplicatedColorArray = _colors_.concat(_colors_);
     let index = 0;
@@ -108,8 +113,11 @@ class InputHandler {
   }
 
   handleClick = (e: MouseEvent) => {
-    const { position, col_ctx, width, height, selected, matched } =
-      this.game.config;
+    const {
+      game: {
+        config: { position, col_ctx, width, height, selected, matched },
+      },
+    } = this;
     const x = e.clientX - position.left;
     const y = e.clientY - position.top;
     const rows = 3;
@@ -238,12 +246,12 @@ class MemoryCanvas extends MemoryCanvasTemplate {
   constructor() {
     super();
     this.attachShadow({ mode: "open" });
-    this.shadowRoot?.appendChild(super.template.content.cloneNode(true));
-    this.shadowRoot?.adoptedStyleSheets.push(super.styles);
-    const canvas = this.shadowRoot?.querySelector(
+    this.shadowRoot!.appendChild(super.template.content.cloneNode(true));
+    this.shadowRoot!.adoptedStyleSheets.push(super.styles);
+    const canvas = this.shadowRoot!.querySelector(
       "#memory-canvas"
     ) as HTMLCanvasElement;
-    const collision_canvas = this.shadowRoot?.querySelector(
+    const collision_canvas = this.shadowRoot!.querySelector(
       "#collision-canvas"
     ) as HTMLCanvasElement;
 
