@@ -61,13 +61,15 @@ class Game {
   }
 
   private drawCollisionGrid = (color_matrix: string[][]) => {
+    const columns = 4;
+    const rows = 3;
     const {
       config: { col_ctx, width, height, matched },
     } = this;
     col_ctx.clearRect(0, 0, width, height);
     const gridCell = {
-      width: width / color_matrix[0].length,
-      height: height / color_matrix.length,
+      width: width / columns,
+      height: height / rows,
       border_size: 4,
     };
     col_ctx.fillStyle = "#FFFFFF";

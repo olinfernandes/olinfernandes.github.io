@@ -605,22 +605,22 @@ window.addEventListener("load", () => {
       } = this;
 
       if (player_score.value > 200) {
-        game_speed.value = 300;
+        game_speed.value = 3000;
         enemy_number.value = 4;
-      } else if (player_score.value > 150) {
+      } else if (player_score.value > 1500) {
         game_speed.value = 250;
-      } else if (player_score.value > 125) {
+      } else if (player_score.value > 1250) {
         game_speed.value = 200;
-      } else if (player_score.value > 100) {
+      } else if (player_score.value > 1000) {
         game_speed.value = 160;
         enemy_number.value = 3;
-      } else if (player_score.value > 80) {
+      } else if (player_score.value > 800) {
         game_speed.value = 80;
-      } else if (player_score.value > 50) {
+      } else if (player_score.value > 500) {
         game_speed.value = 40;
-      } else if (player_score.value > 25) {
+      } else if (player_score.value > 250) {
         game_speed.value = 20;
-      } else if (player_score.value > 10) {
+      } else if (player_score.value > 100) {
         game_speed.value = 10;
         enemy_number.value = 2;
       } else {
