@@ -3,11 +3,14 @@ services:
     build: .
     ports:
       - "3000:80"
+    restart: "always"
   blog-2:
     build: .
     ports:
       - "3001:80"
+    restart: "always"
   blog-3:
     build: .
     ports:
       - "3002:80"
+    restart: "always"
