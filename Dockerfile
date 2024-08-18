@@ -7,7 +7,7 @@ RUN npm install
 
 COPY . .
 
-RUN npm run build
+RUN npm run astro build
 
 FROM nginx:1.21-alpine
 
