@@ -1,0 +1,13 @@
+services:
+  blog-1:
+    build: .
+    ports:
+      - "3000:80"
+  blog-2:
+    build: .
+    ports:
+      - "3001:80"
+  blog-3:
+    build: .
+    ports:
+      - "3002:80"
