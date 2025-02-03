@@ -1,4 +1,4 @@
-import { defineConfig } from "astro/config";
+import { defineConfig, passthroughImageService } from "astro/config";
 import mdx from "@astrojs/mdx";
 import sitemap from "@astrojs/sitemap";
 import compress from "astro-compress";
@@ -9,4 +9,7 @@ import games from "./src/games/integration";
 export default defineConfig({
   site: "https://olinfernandes.github.io",
   integrations: [mdx(), sitemap(), compress(), tailwind(), games()],
+  image: {
+    service: passthroughImageService(),
+  }
 });
