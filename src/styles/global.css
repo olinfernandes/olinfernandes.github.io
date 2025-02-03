@@ -46,9 +46,10 @@ body {
   line-height: 1.7;
 }
 main {
-  width: 720px;
+  width: 1024px;
   max-width: calc(100% - 2em);
-  max-height: calc(100dvh - 8rem);
+  height: calc(100dvh - 8rem);
+  align-content: center;
   overflow: auto;
   margin: auto;
   padding: 3em 1em;
