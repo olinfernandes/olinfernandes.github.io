@@ -17,12 +17,26 @@ export const collections = {
       }),
   }),
   copy: defineCollection({
-    type: 'content',
-    schema: z.object({
+    type: "content",
+    schema: ({ image }) => z.object({
       title: z.string(),
       pubDate: z.coerce.date(),
       updateDate: z.coerce.date(),
       draft: z.boolean().default(false).optional(),
-    })
-  })
+      heroImage: image().optional(),
+      preview: image().optional(),
+    }),
+  }),
+  testimonials: defineCollection({
+  type: "content",
+  schema: ({ image }) =>
+    z.object({
+      href: z.string().url(),
+      author: z.string(),
+      designation: z.string(),
+      pubDate: z.date().default(new Date()),
+      relation: z.string(),
+      avatar: image(),
+    }),
+}),
 };

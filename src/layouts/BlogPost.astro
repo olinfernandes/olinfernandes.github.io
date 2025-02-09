@@ -3,7 +3,6 @@ import type { CollectionEntry } from "astro:content";
 import { Picture } from "astro:assets";
 import Layout from "../layouts/Base.astro";
 import FormattedDate from "../components/FormattedDate.astro";
-import { HERO_IMAGE } from "../consts";
 
 type Props = CollectionEntry<"blog">["data"];
 
@@ -13,16 +12,7 @@ const { title, description, pubDate, updateDate, heroImage } = Astro.props;
 <Layout title={title} description={description}>
   <article>
     <div class="hero-image">
-      {
-        heroImage && (
-          <Picture
-            width={HERO_IMAGE.w}
-            height={HERO_IMAGE.h}
-            src={heroImage}
-            alt=""
-          />
-        )
-      }
+      {heroImage && <Picture src={heroImage} alt="" />}
     </div>
     <div class="prose">
       <div class="title">
@@ -52,9 +42,11 @@ const { title, description, pubDate, updateDate, heroImage } = Astro.props;
   }
   .hero-image {
     width: 100%;
+    max-width: 1024px;
   }
   .hero-image img {
     display: block;
+    aspect-ratio: 16 / 9;
     margin: 0 auto;
     border-radius: 12px;
     box-shadow: var(--box-shadow);

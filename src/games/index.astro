@@ -18,9 +18,9 @@ import Footer from "../components/Footer.astro";
           <li>
             <a href="/games/shooter">Shooter</a>
           </li>
-          <!-- <li>
+          <li>
             <a href="/games/memory">Memory</a>
-          </li> -->
+          </li>
         </nav>
       </game-selection>
 
@@ -75,6 +75,8 @@ import Footer from "../components/Footer.astro";
       }
       main {
         place-self: center;
+        height: calc(100dvh - 4rem);
+        width: calc(100dvw - 4rem);
       }
       a {
         color: var(--accent);

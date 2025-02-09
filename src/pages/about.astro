@@ -3,12 +3,12 @@ import { getEntry } from "astro:content";
 import Layout from "../layouts/BlogPost.astro";
 
 const {
-  data: { title, pubDate, draft },
+  data: { title, pubDate, draft, heroImage },
   render,
 } = await getEntry("copy", "2024-07-15-aboutcopy");
 const { Content } = await render();
 ---
 
-<Layout title={title} description="" pubDate={pubDate}>
+<Layout title={title} description="" pubDate={pubDate} heroImage={heroImage}>
   {!draft && <Content />}
 </Layout>

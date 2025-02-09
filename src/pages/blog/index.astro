@@ -1,12 +1,16 @@
 ---
-import { getCollection } from "astro:content";
+import { type CollectionEntry, getCollection } from "astro:content";
 import { Picture } from "astro:assets";
 import Layout from "../../layouts/Base.astro";
 import FormattedDate from "../../components/FormattedDate.astro";
-import { CARD_IMAGE } from "../../consts";
 
-const posts = (await getCollection("blog", (item) => !item.data.draft)).sort(
-  (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf(),
+type BlogPost = CollectionEntry<"blog">;
+
+const posts: BlogPost[] = (
+  await getCollection("blog", (item: BlogPost) => !item.data.draft)
+).sort(
+  (a: BlogPost, b: BlogPost) =>
+    b.data.pubDate.valueOf() - a.data.pubDate.valueOf()
 );
 ---
 
@@ -14,16 +18,13 @@ const posts = (await getCollection("blog", (item) => !item.data.draft)).sort(
   <section>
     <ul>
       {
-        posts.map((post) => (
+        posts.map(post => (
           <li>
             <a href={`/blog/${post.slug}/`}>
               {post.data.heroImage && (
-                <Picture
-                  width={CARD_IMAGE.w}
-                  height={CARD_IMAGE.h}
-                  src={post.data.heroImage}
-                  alt=""
-                />
+                <div class="card-image">
+                  <Picture src={post.data.heroImage} alt="" />
+                </div>
               )}
               <h4 class="title">{post.data.title}</h4>
               <p class="date">
@@ -39,7 +40,7 @@ const posts = (await getCollection("blog", (item) => !item.data.draft)).sort(
 
 <style>
   main {
-    width: 960px;
+    width: 1024px;
   }
   ul {
     display: flex;
@@ -73,6 +74,11 @@ const posts = (await getCollection("blog", (item) => !item.data.draft)).sort(
   }
   ul li a {
     display: block;
+  }
+  .card-image img {
+    aspect-ratio: 16 / 9;
+    border-radius: 12px;
+    box-shadow: var(--box-shadow);
   }
   .title {
     margin: 0;

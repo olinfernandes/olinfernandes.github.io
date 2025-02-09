@@ -47,7 +47,7 @@ body {
 }
 main {
   width: 1024px;
-  max-width: calc(100% - 2em);
+  max-width: calc(100dvw - 2em);
   height: calc(100dvh - 8rem);
   align-content: center;
   overflow: auto;
