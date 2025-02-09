@@ -6,13 +6,13 @@ export default function () {
     hooks: {
       "astro:config:setup": ({ injectRoute }) => {
         injectRoute({
-          pattern: "/games",
+          pattern: "/games/*",
           entrypoint: "./src/games/index.astro",
           prerender: true,
         });
         injectRoute({
           pattern: "/games/shooter",
-          entrypoint: "./src/games/my_first_game/shooter.astro",
+          entrypoint: "./src/games/shooter_game/shooter.astro",
           prerender: true,
         });
         injectRoute({

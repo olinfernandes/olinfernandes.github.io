@@ -351,21 +351,7 @@ window.addEventListener("load", () => {
     }
 
     canvas: ShooterCanvasProps;
-
-    constructor() {
-      super();
-      this.attachShadow({ mode: "open" });
-      this.shadowRoot?.adoptedStyleSheets.push(this.styles);
-      this.shadowRoot?.appendChild(this.template.content.cloneNode(true));
-
-      const canvas = this.shadowRoot?.querySelector(
-        "#shooter-canvas",
-      ) as HTMLCanvasElement;
-      const collision_canvas = this.shadowRoot?.querySelector(
-        "#collision-canvas",
-      ) as HTMLCanvasElement;
-
-      this.canvas = {
+    canvasProps: (a: HTMLCanvasElement, b: HTMLCanvasElement) => ShooterCanvasProps = (canvas, collision_canvas) => ({
         ctx: this.getCanvasContext(canvas),
         col_ctx: this.getCanvasContext(collision_canvas),
         position: canvas.getBoundingClientRect(),
@@ -387,7 +373,22 @@ window.addEventListener("load", () => {
         current_track: super.signal(0),
         music_playing: super.signal(false),
         music_playlist: [mercuryMusicSfx, venusMusicSfx, marsMusicSfx],
-      };
+      })
+
+    constructor() {
+      super();
+      this.attachShadow({ mode: "open" });
+      this.shadowRoot?.adoptedStyleSheets.push(this.styles);
+      this.shadowRoot?.appendChild(this.template.content.cloneNode(true));
+
+      const canvas = this.shadowRoot?.querySelector(
+        "#shooter-canvas",
+      ) as HTMLCanvasElement;
+      const collision_canvas = this.shadowRoot?.querySelector(
+        "#collision-canvas",
+      ) as HTMLCanvasElement;
+
+      this.canvas = this.canvasProps(canvas, collision_canvas);
 
       this.canvas.width =
         canvas.width =
