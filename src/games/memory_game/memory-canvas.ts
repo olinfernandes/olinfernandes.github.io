@@ -77,7 +77,9 @@ class Game {
   private drawCollisionGrid = (color_matrix: string[][]) => {
     const columns = 4;
     const rows = 3;
-    const { col_ctx, width, height, matched, flipped, flipping } = this.config;
+    const {
+      config: { col_ctx, width, height, matched, flipped },
+    } = this;
     col_ctx.clearRect(0, 0, width, height);
     const gridCell = {
       width: width / columns,
@@ -90,7 +92,8 @@ class Game {
         const key = tileKey(row_index, col_index);
         const isFlipped = flipped.value.has(key);
         const isMatched = matched.value.has(color);
-        const flipProgress = flipping.value.get(key) ?? (isFlipped ? 1 : 0);
+        const flipProgress =
+          this.config.flipping.value.get(key) ?? (isFlipped ? 1 : 0);
 
         col_ctx.save();
 
@@ -160,15 +163,19 @@ class InputHandler {
 
   handleClick = (e: MouseEvent) => {
     const {
-      position,
-      width,
-      height,
-      selected,
-      matched,
-      flipped,
-      flipping,
-      locked,
-    } = this.game.config;
+      game: {
+        config: {
+          position,
+          width,
+          height,
+          selected,
+          matched,
+          flipped,
+          flipping,
+          locked,
+        },
+      },
+    } = this;
     const x = e.clientX - position.left;
     const y = e.clientY - position.top;
     const rows = 3;
@@ -307,7 +314,7 @@ class MemoryCanvas extends MemoryCanvasTemplate {
 
     canvas.addEventListener("game-won", () => {
       alert(`🎉 You've won the game`);
-      setTimeout(() => this.resetGame(), 1e3);
+      setTimeout(() => this.resetGame(), 1e3)
     });
 
     this.config = {
