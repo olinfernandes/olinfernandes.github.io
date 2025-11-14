@@ -11,11 +11,11 @@ const { title, description, pubDate, updateDate, heroImage } = Astro.props;
 
 <Layout title={title} description={description}>
   <article>
-    <div class="hero-image">
+    <div class="hero-image" id="hero-image">
       {heroImage && <Picture src={heroImage} alt="" />}
     </div>
     <div class="prose">
-      <div class="title">
+      <div class="title" id="title">
         <div class="date">
           <FormattedDate date={pubDate} />
           {
@@ -75,3 +75,9 @@ const { title, description, pubDate, updateDate, heroImage } = Astro.props;
     font-style: italic;
   }
 </style>
+
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    document.getElementById("title")?.scrollIntoView();
+  });
+</script>
