@@ -3,12 +3,11 @@ import mdx from "@astrojs/mdx";
 import sitemap from "@astrojs/sitemap";
 import compress from "astro-compress";
 import tailwind from "@astrojs/tailwind";
-import games from './src/games/integration';
 
 // https://astro.build/config
 export default defineConfig({
   site: "https://olinfernandes.github.io",
-  integrations: [mdx(), sitemap(), compress(), tailwind(), games()],
+  integrations: [mdx(), sitemap(), compress(), tailwind()],
   image: {
     service: passthroughImageService(),
   }
