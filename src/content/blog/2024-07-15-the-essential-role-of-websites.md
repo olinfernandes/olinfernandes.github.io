@@ -5,7 +5,7 @@ pubDate: 2024-07-15T04:59:23.520Z
 updateDate: 2024-07-15T04:59:23.520Z
 preview: ./images/blog-placeholder-2.jpg
 heroImage: ./images/blog-placeholder-2.jpg
-draft: false
+draft: true
 tags:
   - internet
 categories:

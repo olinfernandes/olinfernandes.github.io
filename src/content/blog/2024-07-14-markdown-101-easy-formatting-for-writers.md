@@ -5,11 +5,11 @@ pubDate: 2024-07-14T16:41:41.926Z
 updateDate: 2024-07-14T16:41:41.926Z
 preview: ./images/blog-placeholder-4.jpg
 heroImage: ./images/blog-placeholder-4.jpg
-draft: false
+draft: true
 tags:
-- markdown
+  - markdown
 categories:
-- web
+  - web
 type: blog
 ---
 
