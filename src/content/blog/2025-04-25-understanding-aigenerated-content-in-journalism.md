@@ -3,11 +3,13 @@ title: Understanding AIGenerated Content in Journalism
 description: Explore the impact of AI-generated content in journalism and how it shapes news reporting and audience engagement.
 pubDate: 2025-04-25T07:27:45.561Z
 updateDate: 2025-04-25T07:27:45.562Z
-preview: ./images/AI-Agent-Picture.jpg
-heroImage: ./images/AI-Agent-Picture.jpg
-draft: true
-tags: [internet]
-categories: [web]
+preview: ./images/understanding_ai_generated_content_in_journalism_banner.png
+heroImage: ./images/understanding_ai_generated_content_in_journalism_banner.png
+draft: false
+tags:
+  - internet
+categories:
+  - web
 fmContentType: blog
 ---
 

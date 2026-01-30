@@ -5,7 +5,7 @@ pubDate: 2024-07-14T09:11:23.379Z
 updateDate: 2024-07-14T09:11:23.379Z
 preview: ./images/blog-placeholder-3.jpg
 heroImage: ./images/blog-placeholder-3.jpg
-draft: false
+draft: true
 tags:
   - html
 categories:

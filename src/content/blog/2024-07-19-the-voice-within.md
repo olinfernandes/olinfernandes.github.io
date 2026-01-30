@@ -3,8 +3,8 @@ title: The Voice Within
 description: An intense conversation with the voice within.
 pubDate: 2024-07-19T14:22:25.432Z
 updateDate: 2024-07-19T14:22:25.433Z
-preview: ./images/blog-placeholder-3.jpg
-heroImage: ./images/blog-placeholder-3.jpg
+preview: ./images/the_voice_within.png
+heroImage: ./images/the_voice_within.png
 draft: false
 tags:
   - thoughts

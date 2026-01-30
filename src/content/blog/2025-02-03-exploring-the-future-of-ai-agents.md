@@ -3,8 +3,8 @@ title: Exploring the Future of AI Agents
 description: AI agents are becoming increasingly integral to various sectors, particularly in automation, where they enhance efficiency and decision-making.
 pubDate: 2025-02-03T06:23:23.378Z
 updateDate: 2025-02-03T06:23:23.378Z
-preview: ./images/AI-Agent-Picture.jpg
-heroImage: ./images/AI-Agent-Picture.jpg
+preview: ./images/exploring_the_future_of_ai_agents_banner.png
+heroImage: ./images/exploring_the_future_of_ai_agents_banner.png
 draft: false
 tags: []
 categories: []
