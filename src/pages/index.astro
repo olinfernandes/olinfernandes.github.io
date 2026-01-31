@@ -2,11 +2,17 @@
 import { getEntry } from "astro:content";
 import Layout from "../layouts/Base.astro";
 
+const entry = await getEntry("copy", "2024-07-14-homecopy");
+
+if (!entry) {
+  throw new Error('Entry "2024-07-14-homecopy" not found in collection "copy".');
+}
+
 const {
-  render,
-  data: { draft },
-} = await getEntry("copy", "2024-07-14-homecopy");
-const { Content } = await render();
+  data: { title, pubDate, draft, heroImage },
+} = entry;
+
+const { Content } = await entry.render();
 ---
 
 <Layout>
