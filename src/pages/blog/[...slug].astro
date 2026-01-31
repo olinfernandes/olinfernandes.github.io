@@ -18,6 +18,8 @@ const { Content } = await post.render();
 ---
 
 <BlogPost {...post.data}>
+  <div slot="read-time">
+    <ReadTime body={post.body} />
+  </div>
   <Content />
-  <ReadTime body={post.body} />
 </BlogPost>

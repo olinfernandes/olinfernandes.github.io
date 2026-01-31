@@ -17,14 +17,8 @@ const { title, description, pubDate, updateDate, heroImage } = Astro.props;
     <div class="prose">
       <div class="title" id="title">
         <div class="date">
-          <FormattedDate date={pubDate} />
-          {
-            updateDate && updateDate.valueOf() !== pubDate.valueOf() && (
-              <div class="last-updated-on">
-                Last updated on <FormattedDate date={updateDate} />
-              </div>
-            )
-          }
+          Posted on <FormattedDate date={pubDate} />
+          <slot name="read-time" />
         </div>
         <h1>{title}</h1>
         <hr />
