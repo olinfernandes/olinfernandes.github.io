@@ -75,7 +75,7 @@ The EU reflects modern Liberalism through:
 
 It also reveals liberalism's challenges, including democratic distance, bureaucratic complexity and growing nationalist backlash.
 
-### India [^6] [7]
+### India [6] [7]
 
 India represents a large-scale, pluralistic liberal experiment.
 - A constitution guaranteeing fundamental rights.
