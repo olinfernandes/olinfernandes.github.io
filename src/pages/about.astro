@@ -9,6 +9,18 @@ const {
 const { Content } = await entry.render();
 ---
 
-<Layout title={title} description='' pubDate={pubDate} heroImage={heroImage}>
+<Layout title={title} description="" pubDate={pubDate} heroImage={heroImage}>
   {!draft && <Content />}
 </Layout>
+
+<script is:inline
+  data-name="BMC-Widget"
+  data-cfasync="false"
+  src="https://cdnjs.buymeacoffee.com/1.0.0/widget.prod.min.js"
+  data-id="olinfernandes"
+  data-description="Support me on Buy me a coffee!"
+  data-message="Thanks for visiting. If you like my content and would like to show your support click here!"
+  data-color="#5F7FFF"
+  data-position="Right"
+  data-x_margin="18"
+  data-y_margin="18"></script>
